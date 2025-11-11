@@ -142,4 +142,93 @@ RSpec.describe TasksController, type: :controller do
       end
     end
   end
+  describe "PATCH #update" do
+    let(:task) { Task.create!(name: "Old Task", description: "Old description", xp: 10, date: Date.today, user: user) }
+
+    context "with valid attributes" do
+      let(:updated_params) do
+        {
+          name: Faker::Lorem.sentence(word_count: 3),
+          description: Faker::Lorem.paragraph,
+          xp: Faker::Number.between(from: 5, to: 100),
+          date: Faker::Date.forward(days: 30) # random future date
+        }
+      end
+
+      it "updates the task and redirects to tasks_path" do
+        patch :update, params: { id: task.id, task: updated_params }
+        task.reload
+
+        expect(task.name).to eq(updated_params[:name])
+        expect(task.description).to eq(updated_params[:description])
+        expect(task.xp).to eq(updated_params[:xp])
+        expect(task.date).to eq(updated_params[:date])
+        expect(response).to redirect_to(tasks_path)
+        expect(flash[:notice]).to eq("Task successfully updated!")
+      end
+    end
+
+    context "with invalid attributes" do
+      let(:invalid_params) do
+        {
+          name: "",  # name is required
+          description: Faker::Lorem.sentence
+        }
+      end
+
+      it "does not update the task and renders edit template" do
+        patch :update, params: { id: task.id, task: invalid_params }
+        task.reload
+
+        # Check that the task attributes were not changed
+        expect(task.name).to eq("Old Task")
+        expect(task.description).to eq("Old description")
+
+        expect(response).to render_template(:edit)
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(flash[:alert]).to eq("Failed to update task.")
+      end
+    end
+  end
+  describe "DELETE #destroy" do
+    let!(:task) { Task.create!(name: "Task to delete", description: "Will be deleted", xp: 10, date: Date.today, user: user) }
+    let(:other_user) { User.create!(email: Faker::Internet.unique.email, password: "password", username: Faker::Internet.username) }
+
+    context "when user is authorized" do
+      it "deletes the task and redirects to tasks_path" do
+        expect {
+          delete :destroy, params: { id: task.id }
+        }.to change(Task, :count).by(-1)
+
+        expect(response).to redirect_to(tasks_path)
+        expect(flash[:notice]).to eq("Task deleted.")
+      end
+    end
+
+    context "when user is not authorized" do
+      before do
+        sign_in other_user
+      end
+
+      it "does not delete the task and raises Pundit::NotAuthorizedError" do
+        expect {
+          delete :destroy, params: { id: task.id }
+        }.to raise_error(Pundit::NotAuthorizedError)
+
+        # La tâche doit toujours exister
+        expect(Task.exists?(task.id)).to be_truthy
+      end
+    end
+
+    context "when task does not exist" do
+      it "raises ActiveRecord::RecordNotFound" do
+        expect {
+          delete :destroy, params: { id: 0 }
+        }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
+
+
+
 end
