@@ -4,6 +4,7 @@ class Task < ApplicationRecord
   has_many :participants, through: :task_participants, source: :user
 
   after_create :add_creator_as_participant
+  after_initialize :set_defaults, if: :new_record?
 
   #  Validations
   validates :name, presence: true
@@ -20,6 +21,10 @@ class Task < ApplicationRecord
     date == Date.today
   end
 
+  def set_defaults
+    self.date ||= Date.today
+  end
+  
   def complete!
     update(completed: true)
     add_creator_as_participant

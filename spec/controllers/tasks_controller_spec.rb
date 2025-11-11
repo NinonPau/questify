@@ -37,5 +37,32 @@ RSpec.describe TasksController, type: :controller do
       # Should not include declined tasks
       expect(assigns(:participating_tasks)).not_to include(declined_task)
     end
+
+  end
+  describe "GET #new" do
+    context "when user is signed in" do
+      before { sign_in user }
+
+      it "returns http success" do
+        get :new
+        expect(response).to have_http_status(:success)
+      end
+
+      it "assigns a new task to @task" do
+        get :new
+        expect(assigns(:task)).to be_a_new(Task)
+      end
+      it "assigns a new task with default attributes" do
+        get :new
+        task = assigns(:task)
+        expect(task).to be_a_new(Task)               # new unsaved task
+        expect(task.user).to eq(user)                # associated with current_user
+        expect(task.name).to be_nil                  # name is empty by default
+        expect(task.date).to eq(Date.today)          # date defaults to today
+        expect(task.daily).to be_nil                 # daily defaults to nil
+        expect(task.xp).to be_nil                    # xp defaults to nil
+      end
+    end
+
   end
 end
