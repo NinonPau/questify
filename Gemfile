@@ -54,6 +54,12 @@ group :development, :test do
   gem "dotenv-rails"
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ]
+  group :development, :test do
+    gem "rspec-rails"
+    gem "factory_bot_rails" # creation of test object
+    gem "faker"             # fake data
+    gem 'rails-controller-testing'#check which instance variables are set/ check which view template was rendered/
+  end
 end
 
 group :development do
@@ -65,6 +71,8 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+
+
 end
 
 group :test do
