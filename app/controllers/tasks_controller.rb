@@ -30,7 +30,14 @@ class TasksController < ApplicationController
   end
 
   def create
-    @task = current_user.tasks.new(task_params.merge(date: Date.today))
+    # Use the date from params if provided, otherwise default to today
+    task_date = if task_params[:date].present?
+                  Date.parse(task_params[:date]) rescue Date.today
+                else
+                  Date.today
+                end
+
+    @task = current_user.tasks.new(task_params.merge(date: task_date))
     authorize @task
 
     if @task.save
@@ -40,6 +47,8 @@ class TasksController < ApplicationController
       render :new, status: :unprocessable_entity
     end
   end
+
+
 
   # Generate a random task from boredAPI API
   def random
