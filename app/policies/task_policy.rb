@@ -1,50 +1,37 @@
+# frozen_string_literal: true
+
 class TaskPolicy < ApplicationPolicy
-  class Scope < Scope
-    def resolve
-      # user see only his task and the one he his participating in 
-      scope.joins("LEFT JOIN task_participants ON tasks.id = task_participants.task_id")
-           .where("tasks.user_id = ? OR task_participants.user_id = ?", user.id, user.id)
-           .distinct
-    end
+  def index?
+    true
   end
 
   def show?
-    record.user == user || record.participants.include?(user)
+    # user can see their own tasks
+    record.user == user
+    # or allow friends: record.user == user || user.friends.include?(record.user)
   end
 
   def create?
-    user.present?
+    true # all users can create tasks
   end
 
   def update?
+    # user can only modify their own task
     record.user == user
+  end
+
+  def edit?
+    update?
   end
 
   def destroy?
     record.user == user
   end
 
-  def complete?
-    record.user == user
-  end
-
-  def ignore?
-    record.user == user
-  end
-
-  def unignore?
-    record.user == user
-  end
-
-  def invite_friend?
-    record.user == user
-  end
-
-  def accept_invitation?
-    record.participants.include?(user)
-  end
-
-  def decline_invitation?
-    record.participants.include?(user)
+  class Scope < ApplicationPolicy::Scope
+    def resolve
+      # Adjust this as needed
+      scope.where(user: user)
+    end
   end
 end

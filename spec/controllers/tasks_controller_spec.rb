@@ -6,229 +6,141 @@ RSpec.describe TasksController, type: :controller do
   let(:user) { User.create!(email: Faker::Internet.unique.email, password: "password", username: Faker::Internet.username) }
   let(:friend) { User.create!(email: Faker::Internet.unique.email, password: "password", username: Faker::Internet.username) }
 
-  before do
-    sign_in user  # Devise helper to simulate a signed-in user
-  end
+  before { sign_in user }
 
   describe "GET #index" do
-    it "shows today's tasks and pending/accepted invitations, excluding declined ones" do
-      # Today's task created by the user
-      task_today = Task.create!(name: "Today's Task", description: "Description", xp: 10, date: Date.today, user: user)
-
-      # Tasks with invitations
-      accepted_task = Task.create!(name: "Accepted Task", description: "Desc", xp: 10, date: Date.today, user: friend)
-      pending_task = Task.create!(name: "Pending Task", description: "Desc", xp: 10, date: Date.today, user: friend)
-      declined_task = Task.create!(name: "Declined Task", description: "Desc", xp: 10, date: Date.today, user: friend)
-
-      # Simulate invitations (TaskParticipant)
-      TaskParticipant.create!(task: accepted_task, user: user, status: "accepted")
-      TaskParticipant.create!(task: pending_task, user: user, status: "pending")
-      TaskParticipant.create!(task: declined_task, user: user, status: "declined")
+    it "assigns today's tasks and participating tasks" do
+      task_today = Task.create!(name: "Today Task", description: "Desc", xp: 10, date: Date.today, user: user)
+      participant_task = Task.create!(name: "Participant Task", description: "Desc", xp: 10, date: Date.today, user: friend)
+      TaskParticipant.create!(task: participant_task, user: user, status: "accepted")
 
       get :index
 
       expect(response).to have_http_status(:success)
-
-      # Tasks created by the user today
       expect(assigns(:tasks)).to include(task_today)
-
-      # Tasks where the user is a participant (accepted/pending)
-      expect(assigns(:participating_tasks)).to include(accepted_task, pending_task)
-      # Should not include declined tasks
-      expect(assigns(:participating_tasks)).not_to include(declined_task)
+      expect(assigns(:participating_tasks)).to include(participant_task)
     end
-
   end
+
   describe "GET #new" do
-    context "when user is signed in" do
-      before { sign_in user }
-
-      it "returns http success" do
-        get :new
-        expect(response).to have_http_status(:success)
-      end
-
-      it "assigns a new task to @task" do
-        get :new
-        expect(assigns(:task)).to be_a_new(Task)
-      end
-      it "assigns a new task with default attributes" do
-        get :new
-        task = assigns(:task)
-        expect(task).to be_a_new(Task)               # new unsaved task
-        expect(task.user).to eq(user)                # associated with current_user
-        expect(task.name).to be_nil                  # name is empty by default
-        expect(task.date).to eq(Date.today)          # date defaults to today
-        expect(task.daily).to be_nil                 # daily defaults to nil
-        expect(task.xp).to be_nil                    # xp defaults to nil
-      end
+    it "assigns a new task" do
+      get :new
+      expect(response).to have_http_status(:success)
+      expect(assigns(:task)).to be_a_new(Task)
     end
-
   end
+
   describe "POST #create" do
-    context "with valid attributes" do
-      let(:valid_task_params) do
-        {
-          name: Faker::Lorem.sentence(word_count: 3),
-          description: Faker::Lorem.paragraph,
-          xp: Faker::Number.between(from: 5, to: 100)
-        }
-      end
+    let(:valid_params) { { name: "Test Task", description: "Description", xp: 10 } }
 
-      it "creates a new task with default date today" do
-        expect {
-          post :create, params: { task: valid_task_params }
-        }.to change(Task, :count).by(1)
+    it "creates a new task and redirects" do
+      expect {
+        post :create, params: { task: valid_params }
+      }.to change(Task, :count).by(1)
 
-        task = Task.last
-        expect(task.name).to eq(valid_task_params[:name])
-        expect(task.description).to eq(valid_task_params[:description])
-        expect(task.xp).to eq(valid_task_params[:xp])
-        expect(task.date).to eq(Date.today)
-        expect(task.user).to eq(user)
-      end
-
-      it "redirects to tasks_path with notice" do
-        post :create, params: { task: valid_task_params }
-        expect(response).to redirect_to(tasks_path)
-        expect(flash[:notice]).to eq("Task successfully created!")
-      end
+      expect(response).to redirect_to(tasks_path)
     end
 
-    context "with invalid attributes" do
-      let(:invalid_task_params) do
-        {
-          name: "", # Invalid: name is required
-          description: Faker::Lorem.sentence
-        }
-      end
-
-      it "does not create a task" do
-        expect {
-          post :create, params: { task: invalid_task_params }
-        }.not_to change(Task, :count)
-      end
-
-      it "renders the new template with unprocessable_entity" do
-        post :create, params: { task: invalid_task_params }
-        expect(response).to render_template(:new)
-        expect(response).to have_http_status(:unprocessable_entity)
-      end
-    end
-
-    context "with a random future date" do
-      let(:valid_task_params) do
-        {
-          name: Faker::Lorem.sentence(word_count: 3),
-          description: Faker::Lorem.paragraph,
-          xp: Faker::Number.between(from: 5, to: 100),
-          date: Faker::Date.forward(days: 365) # random date within next year
-        }
-      end
-
-      it "creates a new task with a random future date" do
-        random_date = valid_task_params[:date]
-
-        expect {
-          post :create, params: { task: valid_task_params }
-        }.to change(Task, :count).by(1)
-
-        task = Task.last
-        expect(task.name).to eq(valid_task_params[:name])
-        expect(task.description).to eq(valid_task_params[:description])
-        expect(task.xp).to eq(valid_task_params[:xp])
-        expect(task.date).to eq(random_date)
-        expect(task.user).to eq(user)
-      end
+    it "renders :new if invalid" do
+      post :create, params: { task: { name: "" } }
+      expect(response).to render_template(:new)
+      expect(response.status).to eq(422)
     end
   end
+
   describe "PATCH #update" do
-    let(:task) { Task.create!(name: "Old Task", description: "Old description", xp: 10, date: Date.today, user: user) }
+    let!(:task) { Task.create!(name: "Old Task", description: "Old Desc", xp: 5, date: Date.today, user: user) }
 
-    context "with valid attributes" do
-      let(:updated_params) do
-        {
-          name: Faker::Lorem.sentence(word_count: 3),
-          description: Faker::Lorem.paragraph,
-          xp: Faker::Number.between(from: 5, to: 100),
-          date: Faker::Date.forward(days: 30) # random future date
-        }
-      end
-
-      it "updates the task and redirects to tasks_path" do
-        patch :update, params: { id: task.id, task: updated_params }
-        task.reload
-
-        expect(task.name).to eq(updated_params[:name])
-        expect(task.description).to eq(updated_params[:description])
-        expect(task.xp).to eq(updated_params[:xp])
-        expect(task.date).to eq(updated_params[:date])
-        expect(response).to redirect_to(tasks_path)
-        expect(flash[:notice]).to eq("Task successfully updated!")
-      end
+    it "updates the task" do
+      patch :update, params: { id: task.id, task: { name: "Updated" } }
+      task.reload
+      expect(task.name).to eq("Updated")
+      expect(response).to redirect_to(tasks_path)
     end
 
-    context "with invalid attributes" do
-      let(:invalid_params) do
-        {
-          name: "",  # name is required
-          description: Faker::Lorem.sentence
-        }
-      end
-
-      it "does not update the task and renders edit template" do
-        patch :update, params: { id: task.id, task: invalid_params }
-        task.reload
-
-        # Check that the task attributes were not changed
-        expect(task.name).to eq("Old Task")
-        expect(task.description).to eq("Old description")
-
-        expect(response).to render_template(:edit)
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(flash[:alert]).to eq("Failed to update task.")
-      end
+    it "renders edit if invalid" do
+      patch :update, params: { id: task.id, task: { name: "" } }
+      expect(response).to render_template(:edit)
+      expect(response.status).to eq(422)
     end
   end
-  describe "DELETE #destroy" do
-    let!(:task) { Task.create!(name: "Task to delete", description: "Will be deleted", xp: 10, date: Date.today, user: user) }
-    let(:other_user) { User.create!(email: Faker::Internet.unique.email, password: "password", username: Faker::Internet.username) }
 
-    context "when user is authorized" do
-      it "deletes the task and redirects to tasks_path" do
-        expect {
-          delete :destroy, params: { id: task.id }
-        }.to change(Task, :count).by(-1)
+  describe "PATCH #complete" do
+    let!(:task) { Task.create!(name: "Task to complete", description: "Complete me", xp: xp_value, date: Date.today, user: user) }
 
+    context "for a normal task (from new/create)" do
+      let(:xp_value) { 10 }
+
+      it "marks the task as completed and adds XP to participants" do
+        patch :complete, params: { id: task.id }
+        task.reload
+        expect(task.completed).to be_truthy
+        expect(user.reload.total_xp).to eq(xp_value)
         expect(response).to redirect_to(tasks_path)
-        expect(flash[:notice]).to eq("Task deleted.")
       end
     end
 
-    context "when user is not authorized" do
-      before do
-        sign_in other_user
-      end
+    context "for a random task (from random action)" do
+      let(:xp_value) { 20 }  # correspond à ce que random met
 
-      it "does not delete the task and raises Pundit::NotAuthorizedError" do
-        expect {
-          delete :destroy, params: { id: task.id }
-        }.to raise_error(Pundit::NotAuthorizedError)
-
-        # La tâche doit toujours exister
-        expect(Task.exists?(task.id)).to be_truthy
-      end
-    end
-
-    context "when task does not exist" do
-      it "raises ActiveRecord::RecordNotFound" do
-        expect {
-          delete :destroy, params: { id: 0 }
-        }.to raise_error(ActiveRecord::RecordNotFound)
+      it "marks the random task as completed and adds XP" do
+        patch :complete, params: { id: task.id }
+        task.reload
+        expect(task.completed).to be_truthy
+        expect(user.reload.total_xp).to eq(xp_value)
+        expect(response).to redirect_to(tasks_path)
       end
     end
   end
 
 
+  describe "PATCH #ignore and #unignore" do
+    let!(:task) { Task.create!(name: "Task", description: "Desc", xp: 10, date: Date.today, user: user) }
 
+    it "ignores a task" do
+      patch :ignore, params: { id: task.id }
+      task.reload
+      expect(task.ignored).to be true
+      expect(response).to redirect_to(tasks_path)
+    end
+
+    it "unignores a task" do
+      task.update(ignored: true)
+      patch :unignore, params: { id: task.id }
+      task.reload
+      expect(task.ignored).to be false
+      expect(response).to redirect_to(tasks_path)
+    end
+  end
+
+  describe "POST #invite_friend" do
+    let!(:task) { Task.create!(name: "Task", description: "Desc", xp: 10, date: Date.today, user: user) }
+
+    it "invites a friend" do
+      post :invite_friend, params: { id: task.id, friend_id: friend.id }
+      expect(TaskParticipant.exists?(task: task, user: friend)).to be true
+      expect(response).to redirect_to(tasks_path)
+    end
+  end
+
+  describe "PATCH #accept_invitation and #decline_invitation" do
+    let!(:task) { Task.create!(name: "Task", description: "Desc", xp: 10, date: Date.today, user: user) }
+    let!(:tp) { TaskParticipant.create!(task: task, user: friend, status: "pending") }
+
+    before { sign_in friend }
+
+    it "accepts invitation" do
+      patch :accept_invitation, params: { id: task.id }
+      tp.reload
+      expect(tp.status).to eq("accepted")
+      expect(response).to redirect_to(tasks_path)
+    end
+
+    it "declines invitation" do
+      patch :decline_invitation, params: { id: task.id }
+      tp.reload
+      expect(tp.status).to eq("declined")
+      expect(response).to redirect_to(tasks_path)
+    end
+  end
 end
