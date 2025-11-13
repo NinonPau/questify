@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_11_11_155042) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_13_102814) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -28,7 +28,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_11_155042) do
     t.string "name"
     t.text "description"
     t.boolean "daily"
-    t.boolean "completed"
+    t.boolean "completed", default: false
     t.float "xp"
     t.date "date"
     t.boolean "ignored"
@@ -43,6 +43,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_11_155042) do
     t.float "xp_bonus"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "mood_type", default: "Not selected"
+    t.date "date"
     t.index ["user_id"], name: "index_user_moods_on_user_id"
   end
 
@@ -56,6 +58,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_11_155042) do
     t.datetime "updated_at", null: false
     t.string "username"
     t.float "total_xp"
+    t.integer "level"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true

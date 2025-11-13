@@ -1,19 +1,2 @@
-<h1>Tasks</h1>
-
-<%= link_to "New Task", new_task_path %>
-
-<% @tasks.each do |task| %>
-  <div>
-    <p><strong><%= task.name %></strong></p>
-    <p><%= task.description %></p>
-    <p>XP: <%= task.xp %></p>
-    <p>Date: <%= task.date %></p>
-    <p>Completed: <%= task.completed? %></p>
-
-    <%= link_to "Edit", edit_task_path(task) %> |
-    <%= link_to "Delete", task_path(task), method: :delete, data: { confirm: "Are you sure?" } %> |
-    <%= link_to "Complete", complete_task_path(task), method: :patch unless task.completed? %>
-  </div>
-  <hr>
-<% end %>
-
+<h1>Task#index</h1>
+<p>Find me in app/views/tasks/index.html.erb</p>
