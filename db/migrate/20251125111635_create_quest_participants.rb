@@ -8,6 +8,6 @@ class CreateQuestParticipants < ActiveRecord::Migration[7.1]
       t.timestamps
     end
 
-    add_index :quest_participants, [:fellowship_id, :quest_id], unique: true
+    add_index :quest_participants, [:fellowship_id, :quest_id], unique: true # avoid adding the same allies more than once to a quest 
   end
 end

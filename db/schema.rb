@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_11_25_111635) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_25_112142) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -23,6 +23,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_25_111635) do
     t.index ["user_ally_id"], name: "index_fellowships_on_user_ally_id"
     t.index ["user_id", "user_ally_id"], name: "index_fellowships_on_user_id_and_user_ally_id", unique: true
     t.index ["user_id"], name: "index_fellowships_on_user_id"
+  end
+
+  create_table "moods", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "mood_type"
+    t.decimal "xp_bonus", precision: 10, scale: 2, default: "0.0"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_moods_on_user_id"
   end
 
   create_table "quest_participants", force: :cascade do |t|
@@ -67,6 +76,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_25_111635) do
 
   add_foreign_key "fellowships", "users"
   add_foreign_key "fellowships", "users", column: "user_ally_id"
+  add_foreign_key "moods", "users"
   add_foreign_key "quest_participants", "fellowships"
   add_foreign_key "quest_participants", "quests"
   add_foreign_key "quests", "users"
