@@ -10,9 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_11_25_105721) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_25_105939) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "fellowships", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "user_ally_id"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_ally_id"], name: "index_fellowships_on_user_ally_id"
+    t.index ["user_id"], name: "index_fellowships_on_user_id"
+  end
 
   create_table "quests", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -43,5 +53,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_25_105721) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "fellowships", "users"
+  add_foreign_key "fellowships", "users", column: "user_ally_id"
   add_foreign_key "quests", "users"
 end
