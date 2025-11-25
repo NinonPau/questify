@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_11_25_112658) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_25_113403) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -30,6 +30,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_25_112658) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["hearth_id", "user_id"], name: "index_hearth_participants_on_hearth_id_and_user_id", unique: true
     t.index ["hearth_id"], name: "index_hearth_participants_on_hearth_id"
     t.index ["user_id"], name: "index_hearth_participants_on_user_id"
   end
@@ -40,6 +41,16 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_25_112658) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_hearths_on_user_id"
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.bigint "hearth_id", null: false
+    t.bigint "user_id", null: false
+    t.text "content", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["hearth_id"], name: "index_messages_on_hearth_id"
+    t.index ["user_id"], name: "index_messages_on_user_id"
   end
 
   create_table "moods", force: :cascade do |t|
@@ -59,6 +70,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_25_112658) do
     t.datetime "updated_at", null: false
     t.index ["fellowship_id", "quest_id"], name: "index_quest_participants_on_fellowship_id_and_quest_id", unique: true
     t.index ["fellowship_id"], name: "index_quest_participants_on_fellowship_id"
+    t.index ["quest_id", "fellowship_id"], name: "index_quest_participants_on_quest_id_and_fellowship_id", unique: true
     t.index ["quest_id"], name: "index_quest_participants_on_quest_id"
   end
 
@@ -66,9 +78,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_25_112658) do
     t.bigint "user_id", null: false
     t.string "name"
     t.text "description"
-    t.boolean "daily"
-    t.boolean "completed"
-    t.boolean "frozen"
+    t.boolean "daily", default: false
+    t.boolean "completed", default: false
+    t.boolean "frozen", default: false
     t.integer "xp"
     t.date "date"
     t.datetime "created_at", null: false
@@ -96,6 +108,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_25_112658) do
   add_foreign_key "hearth_participants", "hearths"
   add_foreign_key "hearth_participants", "users"
   add_foreign_key "hearths", "users"
+  add_foreign_key "messages", "hearths"
+  add_foreign_key "messages", "users"
   add_foreign_key "moods", "users"
   add_foreign_key "quest_participants", "fellowships"
   add_foreign_key "quest_participants", "quests"
