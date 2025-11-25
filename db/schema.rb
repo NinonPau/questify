@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_11_25_112602) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_25_112658) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -23,6 +23,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_25_112602) do
     t.index ["user_ally_id"], name: "index_fellowships_on_user_ally_id"
     t.index ["user_id", "user_ally_id"], name: "index_fellowships_on_user_id_and_user_ally_id", unique: true
     t.index ["user_id"], name: "index_fellowships_on_user_id"
+  end
+
+  create_table "hearth_participants", force: :cascade do |t|
+    t.bigint "hearth_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["hearth_id"], name: "index_hearth_participants_on_hearth_id"
+    t.index ["user_id"], name: "index_hearth_participants_on_user_id"
   end
 
   create_table "hearths", force: :cascade do |t|
@@ -84,6 +93,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_25_112602) do
 
   add_foreign_key "fellowships", "users"
   add_foreign_key "fellowships", "users", column: "user_ally_id"
+  add_foreign_key "hearth_participants", "hearths"
+  add_foreign_key "hearth_participants", "users"
   add_foreign_key "hearths", "users"
   add_foreign_key "moods", "users"
   add_foreign_key "quest_participants", "fellowships"
