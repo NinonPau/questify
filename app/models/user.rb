@@ -16,8 +16,19 @@ class User < ApplicationRecord
            foreign_key: "user_ally_id",
            dependent: :destroy
 
-  # hearths
-  has_many :hearths, dependent: :destroy
+  # Hearths Created by this user
+  has_many :owned_hearths,
+           class_name: "Hearth",
+           foreign_key: "creator_id",
+           dependent: :destroy
+
+  # Join table when participating in a hearth (invited or own)
+  has_many :hearth_participants, dependent: :destroy
+
+  # Hearths the user participates in (invited or added automatically if owner)
+  has_many :participating_hearths,
+           through: :hearth_participants,
+           source: :hearth
 
   # chat participation
   has_many :hearth_participants, dependent: :destroy
@@ -25,5 +36,5 @@ class User < ApplicationRecord
   # messages
   has_many :messages, dependent: :destroy
 
-  
+
 end
