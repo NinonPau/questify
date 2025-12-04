@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_11_25_113403) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_04_112630) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,6 +40,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_25_113403) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "creator_id", null: false
+    t.index ["creator_id"], name: "index_hearths_on_creator_id"
     t.index ["user_id"], name: "index_hearths_on_user_id"
   end
 
@@ -108,6 +110,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_25_113403) do
   add_foreign_key "hearth_participants", "hearths"
   add_foreign_key "hearth_participants", "users"
   add_foreign_key "hearths", "users"
+  add_foreign_key "hearths", "users", column: "creator_id"
   add_foreign_key "messages", "hearths"
   add_foreign_key "messages", "users"
   add_foreign_key "moods", "users"
