@@ -13,8 +13,8 @@ class Mood < ApplicationRecord
   enum mood_type: {
     amazing: "Amazing",
     good: "Good",
-    OKish: "Ok'ich",
+    OKish: "Ok'ish",
     bad: "Bad",
     calm: "calm"
-  }, _suffix: true# avoid naming conflict, clean, safe 
+  }, _suffix: true# avoid naming conflict, clean, safe
 end
