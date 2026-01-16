@@ -77,4 +77,5 @@ end
 #
 gem "devise"
 
-
+# auhorization
+gem "pundit"

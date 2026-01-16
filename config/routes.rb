@@ -12,5 +12,5 @@ Rails.application.routes.draw do
   # root "posts#index"
 
   # Define routes for Quests model
-  resources :quests, only: [:create]
+  resources :quests, only: [:create, :new]
 end
