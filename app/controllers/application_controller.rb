@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  # Devise gem: every route will be protected by authentication
   before_action :authenticate_user!
   include Pundit::Authorization
 
