@@ -10,7 +10,6 @@ class ApplicationController < ActionController::Base
   end
 
   # Pundit gem: uncomment to activate authorization
-
   # include Pundit::Authorization
 
   # Pundit: allow-list approach
