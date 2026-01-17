@@ -1,0 +1,24 @@
+<form action="/quests" method="post">
+  <!-- name - string -->
+  <label for="name">Announce your quest's name:</label><br>
+  <input type="text" id="name" name="quest[name]"><br><br>
+
+  <!-- description - text -->
+  <label for="description">Tell the tale of your quest:</label><br>
+  <textarea id="description" name="quest[description]"></textarea><br><br>
+
+  <!-- daily - checkbox -->
+  <label for="daily">Is this a daily quest?</label><br>
+  <input type="checkbox" id="daily" name="quest[daily]"><br><br>
+
+  <!-- XP - dropdown -->
+  <label for="xp">How epic is your quest?</label><br>
+  <select name="quest[xp]" id="xp">
+    <option value="10">Stroll -- +10 XP</option>
+    <option value="50">Expedition -- +50 XP</option>
+    <option value="100">Ultimate Trial -- +100 XP</option>
+  </select><br><br>
+
+  <!-- Post - button -->
+  <input type="submit" value="Post Quest">
+</form>
