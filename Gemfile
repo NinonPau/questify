@@ -76,5 +76,6 @@ end
 
 #
 gem "devise"
+gem "pundit"
 
 
