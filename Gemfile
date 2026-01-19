@@ -75,5 +75,6 @@ end
 
 # Authentication
 gem "devise"
+gem "pundit"
 
 gem "pundit"
