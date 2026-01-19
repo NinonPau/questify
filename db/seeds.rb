@@ -4,11 +4,11 @@ Task.destroy_all
 User.delete_all
 
 puts "Creating Users"
-User.create!(username: "Renata", email: "renata@renata.com", password: "password", total_xp: 20)
-User.create!(username: "Ninon", email: "ninon@ninon.com", password: "password", total_xp: 10)
-User.create!(username: "Lucille", email: "lucille@lucille.com", password: "password", total_xp: 50)
-User.create!(username: "Carlo", email: "carlo@carlo.com", password: "password", total_xp: 30)
-User.create!(username: "Frank", email: "frank@frank.com", password: "password", total_xp: 40)
+user_renata = User.create!(username: "Renata", email: "renata@renata.com", password: "password", total_xp: 20)
+user_ninon = User.create!(username: "Ninon", email: "ninon@ninon.com", password: "password", total_xp: 10)
+user_lucille = User.create!(username: "Lucille", email: "lucille@lucille.com", password: "password", total_xp: 50)
+user_carlo = User.create!(username: "Carlo", email: "carlo@carlo.com", password: "password", total_xp: 30)
+user_frank = User.create!(username: "Frank", email: "frank@frank.com", password: "password", total_xp: 40)
 
 puts "Created first Users: #{User.all}"
 
