@@ -19,12 +19,12 @@ class Quest < ApplicationRecord
 
   # register the quest owner automatically
   def add_creator_as_participant
-    creator_fellowship = user.self_fellowship
+    creator_fellowship = user.fellowships.find_by(user_id: user)
 
     quest_participants.find_or_create_by(
       fellowship: creator_fellowship,
       status: "accepted"
     )
   end
-  
+
 end
