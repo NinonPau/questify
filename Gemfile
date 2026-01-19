@@ -73,9 +73,8 @@ group :test do
   gem "selenium-webdriver"
 end
 
-
-#
+# Authentication
 gem "devise"
 gem "pundit"
 
-
+gem "pundit"

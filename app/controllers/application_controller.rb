@@ -1,6 +1,16 @@
 class ApplicationController < ActionController::Base
+  # Devise gem: every route will be protected by authentication through username
   before_action :authenticate_user!
-  include Pundit::Authorization
+  before_action :configure_permitted_parameters, if: :devise_controller?
+
+  protected
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:username])
+  end
+
+  # Pundit gem: uncomment to activate authorization
+  # include Pundit::Authorization
 
   # Pundit: allow-list approach
   after_action :verify_authorized, unless: :skip_pundit?
