@@ -10,8 +10,111 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 0) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_04_112630) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "fellowships", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "user_ally_id"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_ally_id"], name: "index_fellowships_on_user_ally_id"
+    t.index ["user_id", "user_ally_id"], name: "index_fellowships_on_user_id_and_user_ally_id", unique: true
+    t.index ["user_id"], name: "index_fellowships_on_user_id"
+  end
+
+  create_table "hearth_participants", force: :cascade do |t|
+    t.bigint "hearth_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["hearth_id", "user_id"], name: "index_hearth_participants_on_hearth_id_and_user_id", unique: true
+    t.index ["hearth_id"], name: "index_hearth_participants_on_hearth_id"
+    t.index ["user_id"], name: "index_hearth_participants_on_user_id"
+  end
+
+  create_table "hearths", force: :cascade do |t|
+    t.string "name"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "creator_id", null: false
+    t.index ["creator_id"], name: "index_hearths_on_creator_id"
+    t.index ["user_id"], name: "index_hearths_on_user_id"
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.bigint "hearth_id", null: false
+    t.bigint "user_id", null: false
+    t.text "content", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["hearth_id"], name: "index_messages_on_hearth_id"
+    t.index ["user_id"], name: "index_messages_on_user_id"
+  end
+
+  create_table "moods", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "mood_type"
+    t.decimal "xp_bonus", precision: 10, scale: 2, default: "0.0"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_moods_on_user_id"
+  end
+
+  create_table "quest_participants", force: :cascade do |t|
+    t.bigint "fellowship_id", null: false
+    t.bigint "quest_id", null: false
+    t.string "status", default: "pending"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["fellowship_id", "quest_id"], name: "index_quest_participants_on_fellowship_id_and_quest_id", unique: true
+    t.index ["fellowship_id"], name: "index_quest_participants_on_fellowship_id"
+    t.index ["quest_id", "fellowship_id"], name: "index_quest_participants_on_quest_id_and_fellowship_id", unique: true
+    t.index ["quest_id"], name: "index_quest_participants_on_quest_id"
+  end
+
+  create_table "quests", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "name"
+    t.text "description"
+    t.boolean "daily", default: false
+    t.boolean "completed", default: false
+    t.boolean "frozen", default: false
+    t.integer "xp"
+    t.date "date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_quests_on_user_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.string "username"
+    t.integer "total_xp", default: 0
+    t.integer "level", default: 1
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  add_foreign_key "fellowships", "users"
+  add_foreign_key "fellowships", "users", column: "user_ally_id"
+  add_foreign_key "hearth_participants", "hearths"
+  add_foreign_key "hearth_participants", "users"
+  add_foreign_key "hearths", "users"
+  add_foreign_key "hearths", "users", column: "creator_id"
+  add_foreign_key "messages", "hearths"
+  add_foreign_key "messages", "users"
+  add_foreign_key "moods", "users"
+  add_foreign_key "quest_participants", "fellowships"
+  add_foreign_key "quest_participants", "quests"
+  add_foreign_key "quests", "users"
 end

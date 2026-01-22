@@ -4,7 +4,6 @@ class Mood < ApplicationRecord
 
   belongs_to :user
 
-
   # VALIDATIONS
   validates :mood_type, presence: true
   # OPTIONAL ENUM (recommended) created automatic helpers, avoi typo, queries much easier,centrelize allowed valued in one place, make form more easy,
