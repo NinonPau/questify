@@ -10,7 +10,7 @@
     </div>
 
     <div class="mood-button">
-    <%= simple_form_for @user_mood do |f| %>
+    <%= simple_form_for @mood do |f| %>
       <%= f.hidden_field :mood_type, value: "Amazing", class: "mood-card-hidden" %>
       <%= f.submit "Select", class: "btn btn-warning" %>
     <% end %>
@@ -25,7 +25,7 @@
     </div>
 
     <div class="mood-button">
-    <%= simple_form_for @user_mood do |f| %>
+    <%= simple_form_for @mood do |f| %>
       <%= f.hidden_field :mood_type, value: "Good", class: "mood-card-hidden" %>
       <%= f.submit "Select", class: "btn btn-warning" %>
     <% end %>
@@ -40,7 +40,7 @@
     </div>
 
     <div class="mood-button">
-    <%= simple_form_for @user_mood do |f| %>
+    <%= simple_form_for @mood do |f| %>
       <%= f.hidden_field :mood_type, value: "Ok'ish", class: "mood-card-hidden" %>
       <%= f.submit "Select", class: "btn btn-warning" %>
     <% end %>
@@ -55,7 +55,7 @@
     </div>
 
     <div class="mood-button">
-    <%= simple_form_for @user_mood do |f| %>
+    <%= simple_form_for @mood do |f| %>
       <%= f.hidden_field :mood_type, value: "Bad", class: "mood-card-hidden" %>
       <%= f.submit "Select", class: "btn btn-warning" %>
     <% end %>
