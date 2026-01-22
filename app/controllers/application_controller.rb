@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   end
 
   # Pundit gem: uncomment to activate authorization
-  # include Pundit::Authorization
+  include Pundit::Authorization
 
   # Pundit: allow-list approach
   after_action :verify_authorized, unless: :skip_pundit?
