@@ -14,6 +14,8 @@ class FellowshipsController < ApplicationController
 
   # POST /fellowships
   def create
+    # Authorize the action even if the ally is not found
+    authorize Fellowship
     # Find the user to invite using the username provided in the form
     ally = User.find_by(username: params[:ally_username])
 
@@ -34,9 +36,7 @@ class FellowshipsController < ApplicationController
       status: "pending"
     )
 
-    # Authorize the action using Pundit
-    # This ensures the current user is allowed to create this fellowship
-    authorize @fellowship
+    
 
     # Try to save the fellowship request
     if @fellowship.save
