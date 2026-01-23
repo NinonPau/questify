@@ -14,8 +14,12 @@ class FellowshipsController < ApplicationController
 
   # POST /fellowships
   def create
-    # Authorize the action even if the ally is not found
-    authorize Fellowship
+    # Even if the invited user does not exist, the create action is still authorized, 
+    # so Pundit does not raise an error and the request can safely be rejected with a user-friendly message. 
+    # 
+    authorize Fellowship # not @fellowship because it is not yet built 
+    # “Is the current user allowed to create a Fellowship in general?”
+    
     # Find the user to invite using the username provided in the form
     ally = User.find_by(username: params[:ally_username])
 
