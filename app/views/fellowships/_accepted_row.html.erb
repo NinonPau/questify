@@ -1,0 +1,23 @@
+<% if fellowships.any? %>
+  <ul>
+    <% fellowships.each do |fellowship| %>
+      <li>
+        <%# Display the ally username depending on who is the current user %>
+        <% ally =
+             fellowship.user == current_user ? fellowship.ally : fellowship.user %>
+
+        <span>
+          <%= ally.username %>
+        </span>
+
+        <%# remove an accepted fellowship %>
+        <%= button_to "Remove",
+                      fellowship_path(fellowship),
+                      method: :delete,
+                      data: { confirm: "Are you sure?" } %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>You need some Allies!.</p>
+<% end %>
