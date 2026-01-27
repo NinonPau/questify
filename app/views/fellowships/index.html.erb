@@ -1,17 +1,5 @@
 <div>
   <h1>Fellowships</h1>
-
-  <div>
-    <h2>Invite an ally</h2>
-
-    <%= form_with url: fellowships_path, method: :post, local: true do %>
-      <div>
-        <%= text_field_tag :ally_username, nil, placeholder: "Username", class: "form-control", required: true %>
-        <%= submit_tag "Send request" %>
-      </div>
-    <% end %>
-  </div>
-
   <div>
     <div>
       <h2>Received requests</h2>
@@ -27,5 +15,16 @@
       <h2>Accepted</h2>
       <%= render "accepted", fellowships: @accepted_fellowships %>
     </div>
+  </div>
+  
+  <div>
+    <h2>Invite an ally</h2>
+
+    <%= form_with url: fellowships_path, method: :post, local: true do %>
+      <div>
+        <%= text_field_tag :ally_username, nil, placeholder: "Username", class: "form-control", required: true %>
+        <%= submit_tag "Send request" %>
+      </div>
+    <% end %>
   </div>
 </div>

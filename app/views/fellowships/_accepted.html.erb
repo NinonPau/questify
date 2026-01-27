@@ -1,4 +1,5 @@
 <% if fellowships.any? %>
+
   <ul>
     <% fellowships.each do |fellowship| %>
       <li>
@@ -6,9 +7,9 @@
         <% ally =
              fellowship.user == current_user ? fellowship.ally : fellowship.user %>
 
-        <span>
+        <p>
           <%= ally.username %>
-        </span>
+        </p>
 
         <%# remove an accepted fellowship %>
         <%= button_to "Remove",

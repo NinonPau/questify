@@ -2,9 +2,9 @@
   <ul>
     <% fellowships.each do |fellowship| %>
       <li>
-        <span>
+        <p>
           <%= fellowship.ally.username %>
-        </span>
+        </p>
 
         <%= button_to "Cancel",
                       fellowship_path(fellowship),

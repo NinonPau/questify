@@ -2,9 +2,9 @@
   <ul>
     <% fellowships.each do |fellowship| %>
       <li>
-        <span>
+        <p>
           <%= fellowship.user.username %>
-        </span>
+        </p>
 
         <%= button_to "Accept",
                       fellowship_path(fellowship),
