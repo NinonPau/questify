@@ -2,23 +2,20 @@
   <h1>Fellowships</h1>
   <div>
     <div>
-      <h2>Received requests</h2>
-      <%= render "pending_received", fellowships: @pending_received %>
+        <h2>Invitation Scroll</h2>
+        <%= render "pending_sent", fellowships: @pending_sent %>
+        
+        <%= render "pending_received", fellowships: @pending_received %>
     </div>
 
     <div>
-      <h2>Sent requests</h2>
-      <%= render "pending_sent", fellowships: @pending_sent %>
-    </div>
-
-    <div>
-      <h2>Accepted</h2>
+      <h2>Allies</h2>
       <%= render "accepted", fellowships: @accepted_fellowships %>
     </div>
   </div>
   
   <div>
-    <h2>Invite an ally</h2>
+    <h2>Invite an Ally!</h2>
 
     <%= form_with url: fellowships_path, method: :post, local: true do %>
       <div>
