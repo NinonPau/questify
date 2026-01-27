@@ -26,6 +26,19 @@ RSpec.describe "Fellowships", type: :request do
         post fellowships_path, params: { ally_username: "unknown_user" }
       }.not_to change(Fellowship, :count)
     end
+    it "resends an invitation by reusing an existing declined fellowship" do
+      sign_in sender
+
+      # Existing declined fellowship (same sender/receiver pair)
+      declined = Fellowship.create!(user: sender, ally: receiver, status: "declined")
+
+      expect {
+        post fellowships_path, params: { ally_username: receiver.username }
+      }.not_to change(Fellowship, :count)
+
+      expect(declined.reload.status).to eq("pending")
+    end
+
   end
 
   describe "PATCH /fellowships/:id" do
