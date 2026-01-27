@@ -1,0 +1,18 @@
+<% if fellowships.any? %>
+  <ul>
+    <% fellowships.each do |fellowship| %>
+      <li>
+        <span>
+          <%= fellowship.ally.username %>
+        </span>
+
+        <%= button_to "Cancel",
+                      fellowship_path(fellowship),
+                      method: :delete,
+                      data: { confirm: "Cancel this request?" } %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No pending requests sent.</p>
+<% end %>
