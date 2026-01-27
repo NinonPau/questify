@@ -1,0 +1,50 @@
+
+// Base 
+body {
+  font-family: $body-font;
+  font-size: 15px;
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+  color: $color-secondary;
+  background: $color-dark;
+}
+
+// Titles 
+h1{
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: $color-primary;
+}
+
+h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: $color-primary-light;
+}
+
+
+// Text 
+p {
+  font-size: 1rem;
+  font-weight: 400;
+}
+// computer screens
+@media (min-width: 768px) {
+  body {
+    font-size: 16px;
+  }
+
+  h1 {
+    font-size: 2.4rem;
+  }
+
+  h2 {
+    font-size: 1.8rem;
+  }
+
+    p {
+        font-size: 1.1rem;
+    }   
+}
