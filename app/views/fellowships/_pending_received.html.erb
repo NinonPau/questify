@@ -1,0 +1,23 @@
+<% if fellowships.any? %>
+  <ul>
+    <% fellowships.each do |fellowship| %>
+      <li>
+        <span>
+          <%= fellowship.user.username %>
+        </span>
+
+        <%= button_to "Accept",
+                      fellowship_path(fellowship),
+                      method: :patch,
+                      params: { status: "accepted" } %>
+
+        <%= button_to "Decline",
+                      fellowship_path(fellowship),
+                      method: :patch,
+                      params: { status: "declined" } %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No invitation scroll received yet !.</p>
+<% end %>
