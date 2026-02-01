@@ -36,6 +36,10 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
+  # Tell Rails which host or port has to use when generate a full URL to send
+  # an email (Devise password reset, confirmation, unlock, etc.).
+  config.action_mailer.default_url_options = { host: "http://localhost:3000" }
+
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 
