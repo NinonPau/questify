@@ -17,9 +17,9 @@ class UserMoodController < ApplicationController
 
   def update
     @mood = Mood.find(params[:id])
-    @mood.update(strong_params)
     @mood.xp_bonus = set_xp_bonus
-    @mood.save
+    @mood.update(strong_params)
+    # @mood.save
     redirect_to root_path
   end
 
