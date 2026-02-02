@@ -4,7 +4,6 @@ class Mood < ApplicationRecord
 
   belongs_to :user
 
-
   # VALIDATIONS
   validates :mood_type, presence: true
   # OPTIONAL ENUM (recommended) created automatic helpers, avoi typo, queries much easier,centrelize allowed valued in one place, make form more easy,
@@ -14,7 +13,6 @@ class Mood < ApplicationRecord
     amazing: "Amazing",
     good: "Good",
     OKish: "Ok'ish",
-    bad: "Bad",
-    calm: "calm"
+    Bad: "Bad",
   }, _suffix: true# avoid naming conflict, clean, safe
 end
