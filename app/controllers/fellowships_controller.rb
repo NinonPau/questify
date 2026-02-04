@@ -3,6 +3,7 @@ class FellowshipsController < ApplicationController
 
   # GET /fellowships
   def index
+    authorize Fellowship
     # check authorization via policy scope
     @fellowships = policy_scope(Fellowship)
 
@@ -16,7 +17,6 @@ class FellowshipsController < ApplicationController
   def create
     # Even if the invited user does not exist, the create action is still authorized, 
     # so Pundit does not raise an error and the request can safely be rejected with a user-friendly message. 
-    # 
     authorize Fellowship # not @fellowship because it is not yet built 
     # “Is the current user allowed to create a Fellowship in general?”
     
@@ -34,18 +34,22 @@ class FellowshipsController < ApplicationController
     # - current_user is the sender of the invitation
     # - ally is the receiver of the invitation
     # - status is set to "pending" until the receiver responds
-    @fellowship = Fellowship.new(
+    # - Find an existing fellowship (decline )
+    @fellowship = Fellowship.find_or_initialize_by(
       user: current_user,
       ally: ally,
-      status: "pending"
     )
-
-    
+    # If the fellowship was previously declined, allow resending the invitation
+    if @fellowship.declined?
+      @fellowship.status = "pending"
+    end
+    # If this is a new record, set the initial status
+    @fellowship.status ||= "pending"
 
     # Try to save the fellowship request
     if @fellowship.save
       # Success: redirect back with a confirmation message
-      redirect_to fellowships_path, notice: "Fellowship request sent"
+      redirect_to fellowships_path, notice: "Fellowship scroll sent"
     else
       # Failure: redirect back with an error message
       redirect_to fellowships_path, alert: "Failed request"
