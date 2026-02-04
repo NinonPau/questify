@@ -1,6 +1,7 @@
 class UserMoodController < ApplicationController
   # before_action :authenticate_user! ##if implemented##
 
+  # POST /moods
   def create
     @mood = Mood.new(strong_params)
     @mood.user = current_user
@@ -11,10 +12,12 @@ class UserMoodController < ApplicationController
     end
   end
 
+  # PATCH /moods/:id
   def edit
     @mood = Mood.find(params[:id])
   end
 
+  # PATCH /moods/:id
   def update
     @mood = Mood.find(params[:id])
     @mood.xp_bonus = set_xp_bonus

@@ -6,9 +6,9 @@ class Mood < ApplicationRecord
 
   # VALIDATIONS
   validates :mood_type, presence: true
+  
   # OPTIONAL ENUM (recommended) created automatic helpers, avoi typo, queries much easier,centrelize allowed valued in one place, make form more easy,
 
-  # Example moods — adjust as you want
   enum mood_type: {
     amazing: "Amazing",
     good: "Good",
@@ -16,6 +16,7 @@ class Mood < ApplicationRecord
     Bad: "Bad",
   }, _suffix: true# avoid naming conflict, clean, safe
 
+  # XP_BONUS_LOGIC
   def set_xp_bonus
     case @mood.mood_type
     when "Amazing" then 1.25
