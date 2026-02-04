@@ -1,3 +1,20 @@
-<h1>Pages#home</h1>
-<h2>Find me in app/views/pages/home.html.erb</h2>
-<p>Find me in app/views/pages/home.html.erb</p>
+<%# user_signed_in? still an option? %>
+<% if user_signed_in? %>
+
+  <%# DASHBOARD %>
+  <div class="dashboard">
+    <% if current_user.mood %>
+    <%# Only works with fontawesome or something? %>
+      <%= link_to raw('<i class="fa-solid fa-cloud-sun home-btn-icon"></i> Update Mood'), edit_mood_path(current_user.mood), style: "border-radius: 15px; min-width: 180px;"  %>
+    <% else %>
+      <%= link_to "Log Mood", new_mood_path, style: "border-radius: 15px; min-width: 180px;"  %>
+    <% end %>
+    <%= link_to raw('<i class="fa-solid fa-scroll home-btn-icon"></i> View Quests'), tasks_path, style: "border-radius: 15px; min-width: 180px;" %>
+    <%= link_to raw('<i class="fa-solid fa-feather home-btn-icon"></i> Add A Quest'), new_task_path, style: "border-radius: 15px; min-width: 180px;" %>
+    <%= link_to raw('<i class="fa-solid fa-handshake-angle home-btn-icon"></i> Find Questers'), friendships_path, style: "border-radius: 15px; min-width: 180px;" %>
+    <%= link_to raw('<i class="fa-solid fa-fire home-btn-icon"></i> Go to Hearth'), chat_rooms_path, style: "border-radius: 15px; min-width: 180px;" %>
+  </div>
+
+<% else %>
+  <%= render "public_home" %>
+<% end %>
