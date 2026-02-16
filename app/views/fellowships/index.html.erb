@@ -1,0 +1,27 @@
+<div>
+  <h1>Fellowships</h1>
+  <div>
+    <div>
+        <h2>Invitation Scroll</h2>
+        <%= render "pending_sent", fellowships: @pending_sent %>
+        
+        <%= render "pending_received", fellowships: @pending_received %>
+    </div>
+
+    <div>
+      <h2>Allies</h2>
+      <%= render "accepted", fellowships: @accepted_fellowships %>
+    </div>
+  </div>
+  
+  <div>
+    <h2>Invite an Ally!</h2>
+
+    <%= form_with url: fellowships_path, method: :post, local: true do %>
+      <div>
+        <%= text_field_tag :ally_username, nil, placeholder: "Username", class: "form-control", required: true %>
+        <%= submit_tag "Send request" %>
+      </div>
+    <% end %>
+  </div>
+</div>
