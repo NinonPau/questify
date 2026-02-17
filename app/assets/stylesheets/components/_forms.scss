@@ -1,0 +1,144 @@
+
+.form-card {
+    position: absolute; // position  the form from the parent element (body)
+    top:35%; // place where the top corner of the card will be (50% from the top of the page)
+    transform:translateY(-35%); 
+    padding: 24px;
+    left: 16px;
+    right: 16px;
+
+    background: rgba($color-dark, 0.6); // semi-transparent background
+    backdrop-filter: blur(10px); // blur the background behind the form is blured
+    
+    border: 1px solid $color-primary-light;
+    border-radius: 16px;
+    // shining pink effect
+    box-shadow:
+    0 0 20px #ff33ff,
+    0 0 20px #ff33ff inset,
+    0 0 20px #bb33ff;
+    }
+@media (min-width: 768px) {
+    .form-card {
+        top: 50%;
+        left: 50%;
+        right: auto;
+        transform: translate(-50%, -50%);
+        max-width: calc(100% - 32px);    // sin case it is a small laptop 
+        width: 500px;
+        padding: 40px;
+        
+        
+  }
+}
+// get ride of the white border around fieldset (remenber me)
+fieldset {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    min-width: 0; 
+    }
+
+// labels
+.form-label,
+label {
+    display: block;
+    margin-bottom: 0.9rem;
+    margin-top: 0.9rem;
+    color: $color-primary-light;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.4px;
+}
+ 
+// inputs 
+.form-control,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="number"],
+textarea,
+select {
+    color: $color-dark;
+    width: 100%;
+    background: $color-secondary-dark;
+    border: 2px solid $color-secondary;
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-family: $body-font;
+    outline: none;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+} 
+.form-control:focus,
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: $color-secondary-dark;
+    box-shadow:
+    0 0 20px #ff33ff,
+    0 0 20px #ff33ff inset,
+    0 0 20px #bb33ff;
+    background:$color-primary;
+    }
+
+//placeholder
+::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+    }
+
+// spacing des champs
+.form-group,
+.field,
+.input {
+    margin-bottom: 1rem;
+}
+
+ //erreurs Rails (simple_form / devise / rails)
+.field_with_errors .form-control,
+.field_with_errors input,
+.field_with_errors textarea,
+.field_with_errors select {
+    border-color: #ff6b6b;
+    box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.18);
+}
+
+// messages d’erreur (utile pour devise)
+ .form-error,
+.error,
+.invalid-feedback {
+    margin-top: 0.35rem;
+    font-size: 0.85rem;
+    color: #ffb3b3;
+}
+
+ // checkbox / remember me
+.form-check {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 12px 0 16px;
+    color: #ff6b6b;
+}
+
+.form-check-input {
+    width: 18px;
+    height: 18px;
+  
+} 
+// avoid spacing issues with form parent elements 
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+//avoid change of color with the auto fill from the browser
+input:-webkit-autofill,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:hover,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-text-fill-color: $color-primary; // couleur du texte
+  transition: background-color 9999s ease-in-out 0s; 
+  box-shadow: 0 0 0px 1000px $color-secondary-dark inset;
+}
