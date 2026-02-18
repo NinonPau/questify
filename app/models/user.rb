@@ -36,5 +36,12 @@ class User < ApplicationRecord
   # messages
   has_many :messages, dependent: :destroy
 
+  # Returns a special fellowship representing the user as their own participant.
+# Used to automatically register quest creators as participants.
+def self_fellowship
+  Fellowship.find_or_create_by!(user: self, ally: self) do |f|
+    f.status = "accepted"
+  end
+end
 
 end

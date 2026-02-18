@@ -1,4 +1,6 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
+# require "pundit/rspec"
+require "pundit/rspec"
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
@@ -70,5 +72,8 @@ RSpec.configure do |config|
   # for sign in helper in request specs
   RSpec.configure do |config|
     config.include Devise::Test::IntegrationHelpers, type: :request
+  end
+  RSpec.configure do |config|
+    config.include Pundit::RSpec::Matchers, type: :policy
   end
 end

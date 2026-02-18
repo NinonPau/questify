@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  
   devise_for :users
   
   root to: "pages#home"
@@ -9,6 +10,15 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
   resources :fellowships, only: [:index, :create, :update, :destroy]
 
+  resources :quests do
+    member do # for these actions apply to ONE specific quest.(/quests/:id/invite_ally insteed of /quests/invite_ally) not really sure about it 
+      #will change if necessary when we implement the actual invitation flow, 
+      #but for now it makes sense to have the quest ID in the URL since we need to know which quest we're inviting an ally to.
+      post  :invite_ally
+      patch :accept_invitation
+      patch :decline_invitation
+    end
+  end
   # Defines the root path route ("/")
   # root "posts#index"
 end
