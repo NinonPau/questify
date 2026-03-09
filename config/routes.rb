@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  
   devise_for :users
   
   root to: "pages#home"
@@ -8,7 +9,13 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
   resources :fellowships, only: [:index, :create, :update, :destroy]
-
+  resources :quests do
+    member do
+      post  :invite_ally
+      patch :accept_invitation
+      patch :decline_invitation
+    end
   # Defines the root path route ("/")
   # root "posts#index"
+  end
 end

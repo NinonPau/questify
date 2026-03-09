@@ -36,5 +36,17 @@ class User < ApplicationRecord
   # messages
   has_many :messages, dependent: :destroy
 
+  # PUBLIC METHODS
 
+  # Returns the self-fellowship for this user.
+  # A self-fellowship is a special accepted fellowship
+  # linking the user to themselves.
+  # This is used so that the quest owner can participate
+  # in their own quest through the same mechanism
+  # as other allies (via fellowship).
+  def self_fellowship
+    Fellowship.find_or_create_by!(user: self, ally: self) do |fellowship|
+      fellowship.status = "accepted"
+    end
+  end
 end
