@@ -1,12 +1,27 @@
 
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
 // Base 
 body {
+
+  background-image: linear-gradient(rgba(26, 16, 32, 0.6),rgba(49, 20, 61, 0.4)), url(https://img.freepik.com/free-photo/pixel-art-river-landscape-illustration_23-2151793209.jpg);
+  background-size: cover;        // couvre tout l'écran
+  background-position: center;   // centre l’image
+  background-repeat: no-repeat;
+
   font-family: $body-font;
   font-size: 15px;
   line-height: 1.6;
   letter-spacing: 0.01em;
   color: $color-secondary;
-  background: $color-dark;
+  //background: $color-dark;
+  margin: 0;
+  min-height: 100vh;
+  
+  position: relative;
 }
 
 // Titles 
@@ -22,6 +37,7 @@ h2 {
   font-weight: 600;
   letter-spacing: 0.04em;
   color: $color-primary-light;
+  text-align: center;
 }
 
 
@@ -29,6 +45,18 @@ h2 {
 p {
   font-size: 1rem;
   font-weight: 400;
+}
+a{
+  color: $color-secondary;
+  text-decoration: underline;
+  &:hover {
+    color: $color-primary-light;
+    text-shadow:
+      0 0 5px #ff33ff,
+      0 0 10px #ff33ff,
+      0 0 20px #bb33ff;
+
+  } 
 }
 // computer screens
 @media (min-width: 768px) {

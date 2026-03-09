@@ -1,0 +1,44 @@
+
+.btn,
+input[type="submit"],
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  background: $color-secondary-dark;
+  color: $color-primary;
+  border: 0;
+  border-radius: 12px;
+  padding: 12px 16px;
+
+  font-family: $headers-font;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+
+  cursor: pointer;
+  transition: transform 120ms ease, opacity 120ms ease;
+}
+
+.btn:hover,
+input[type="submit"]:hover,
+button:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+  box-shadow:
+    0 0 20px #ff33ff,
+    0 0 20px #ff33ff inset,
+    0 0 20px #bb33ff;
+}
+
+.btn:active,
+input[type="submit"]:active,
+button:active {
+  transform: translateY(0);
+}
+.form-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
