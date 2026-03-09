@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Home", type: :request do
+RSpec.describe "Pages#Home", type: :request do
   it "returns http success" do
     get root_path
 
