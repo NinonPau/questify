@@ -11,12 +11,8 @@
     backdrop-filter: blur(10px); // blur the background behind the form is blured
     
     border: 1px solid $color-primary-light;
-   /*  border-radius: 16px; */
-    // shining pink effect
-    /* box-shadow:
-    0 0 20px #ff33ff,
-    0 0 20px #ff33ff inset,
-    0 0 20px #bb33ff;*/
+    border-radius: 16px;
+    
     } 
 @media (min-width: 768px) {
     .form-card {
@@ -64,7 +60,7 @@ select {
     width: 100%;
     background: $color-secondary-dark;
     border: 2px solid $color-secondary;
-    /* border-radius: 12px; */
+    border-radius: 12px;
     padding: 12px 14px;
     font-family: $body-font;
     outline: none;
@@ -75,10 +71,7 @@ input:focus,
 textarea:focus,
 select:focus {
     border-color: $color-secondary-dark;
-    /* box-shadow:
-    0 0 20px #ff33ff,
-    0 0 20px #ff33ff inset,
-    0 0 20px #bb33ff; */
+    
     background:$color-primary;
     }
 
