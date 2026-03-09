@@ -24,7 +24,7 @@ class QuestParticipant < ApplicationRecord
   validates :fellowship_id, uniqueness: { scope: :quest_id }
 
 
-  # BUSINESS METHODS
+  # PUBLIC METHODS
 
   # Accept the invitation.
   # Raises ActiveRecord::RecordInvalid if not true.

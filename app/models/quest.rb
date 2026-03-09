@@ -15,11 +15,11 @@ class Quest < ApplicationRecord
   # When the quest is created, make sure the creator is a participant
   after_create :add_creator_as_participant
 
-  # PUBLIC INSTANCE METHODS
+  # PUBLIC METHODS
 
   # register the quest owner automatically
   # This method ensures the quest owner is registered as a participant.
-  # It uses a special "self_fellowship" representing the user with themselves.
+  # It uses a special "self_fellowship" representing the user with themselves.( find it in user.rb)
   def add_creator_as_participant
     # Retrieve (or create) the fellowship linking the user to themselves.
     creator_fellowship = user.self_fellowship
@@ -69,7 +69,7 @@ class Quest < ApplicationRecord
     Fellowship
       # Only consider accepted relationships.
       .where(status: "accepted")
-      # Check both (a → b) and (b → a).
+      # Check both (a - b) and (b - a).
       .where(
         "(user_id = :a AND user_ally_id = :b) OR (user_id = :b AND user_ally_id = :a)",
         a: a.id,
